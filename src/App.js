@@ -13,7 +13,7 @@ function App() {
       setTasks(tasksFromServer);
     }
     getTasks();
-  })
+  }, [])
 
   const fetchTasks = async () => {
     const response = await fetch('http://localhost:5000/tasks');
