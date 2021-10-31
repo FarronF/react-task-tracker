@@ -22,7 +22,7 @@ function App() {
     return data;
   }
 
-  const fetchTask = async (id) => {
+    const fetchTask = async (id) => {
     const response = await fetch(`http://localhost:5000/tasks/${id}`);
     const data = await response.json();
 
@@ -49,13 +49,21 @@ function App() {
     setTasks(tasks.filter(task => task.id !== id));
   }
 
-  const toggleReminder = (id) => {
+  const toggleReminder = async (id) => {
+    const taskToChange = tasks.find(task =>
+      task.id === id);
+    
+    taskToChange.reminder = !taskToChange.reminder;
+
+    console.log(taskToChange);
+    await fetch(`http://localhost:5000/tasks/${id}`, {
+      method: 'PUT', 
+      headers: { 'Content-type': 'application/json'}, 
+      body: JSON.stringify(taskToChange)
+    });
 
 
-    setTasks(tasks.map(task =>
-      task.id === id
-        ? { ...task, reminder: !task.reminder }
-        : task));
+    setTasks([...tasks]);
   }
 
   const toggleShowAddTask = () => {
