@@ -1,9 +1,11 @@
 import Header from './components/Header'
 import Tasks from './components/Tasks';
+import AddTask from './components/AddTask';
 import { useState } from "react"
 
 
 function App() {
+  const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -26,8 +28,14 @@ function App() {
 
   ])
 
+  const addTask = (task) => {
+    const highestId = tasks.map(task => task.id).sort()[tasks.length - 1];
+    console.log('highestId', highestId);
+    setTasks([...tasks, {...task, id: highestId + 1}]);
+  }
+
   const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id))
+    setTasks(tasks.filter(task => task.id !== id));
   }
 
   const toggleReminder = (id) => {
@@ -35,12 +43,19 @@ function App() {
     setTasks(tasks.map(task =>
       task.id === id
         ? { ...task, reminder: !task.reminder }
-        : task))
+        : task));
+  }
+
+  const toggleShowAddTask = () => {
+    setShowAddTask(!showAddTask);
   }
 
   return (
     <div className="container">
-      <Header title='Faz' />
+      <Header title='Faz' showAddTask={showAddTask} onToggleShowAddTask={toggleShowAddTask} />
+      {
+        showAddTask && <AddTask onAdd={addTask} />
+      }
       {
         tasks.length > 0
           ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
