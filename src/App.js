@@ -1,5 +1,6 @@
 import Header from './components/Header'
 import Tasks from './components/Tasks';
+import Footer from './components/Footer';
 import AddTask from './components/AddTask';
 import { useState, useEffect } from "react"
 
@@ -53,15 +54,16 @@ function App() {
     const updatedTask = {...taskToChange, reminder: !taskToChange.reminder}
 
     console.log(taskToChange);
-    await fetch(`http://localhost:5000/tasks/${id}`, {
+    const response = await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'PUT', 
       headers: { 'Content-type': 'application/json'}, 
       body: JSON.stringify(updatedTask)
     });
 
+    const data = await response.json();
 
     setTasks(tasks.map(task => {
-      return task.id === id ? updatedTask : task;
+      return task.id === id ? data : task;
     }));
   }
 
@@ -80,6 +82,7 @@ function App() {
           ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
           : <p>No tasks present</p>
       }
+      <Footer />
     </div>
 
   );
