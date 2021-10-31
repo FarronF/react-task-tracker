@@ -1,3 +1,9 @@
+A simple task tracker to familiarise myself with react concepts. Includes a json-server backend and routing.
+
+
+### `npm run server`
+Runs the json-server backend the the app will use.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
