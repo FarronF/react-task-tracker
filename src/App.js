@@ -39,9 +39,6 @@ function App() {
     const data = await response.json();
     
     setTasks([...tasks, data]);
-    // const highestId = tasks.map(task => task.id).sort()[tasks.length - 1];
-    // await fetch(`http://localhost:5000/tasks`, {method: 'POST', body: task});
-    // setTasks([...tasks, {...task, id: highestId + 1}]);
   }
 
   const deleteTask = async (id) => {
@@ -53,17 +50,19 @@ function App() {
     const taskToChange = tasks.find(task =>
       task.id === id);
     
-    taskToChange.reminder = !taskToChange.reminder;
+    const updatedTask = {...taskToChange, reminder: !taskToChange.reminder}
 
     console.log(taskToChange);
     await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'PUT', 
       headers: { 'Content-type': 'application/json'}, 
-      body: JSON.stringify(taskToChange)
+      body: JSON.stringify(updatedTask)
     });
 
 
-    setTasks([...tasks]);
+    setTasks(tasks.map(task => {
+      return task.id === id ? updatedTask : task;
+    }));
   }
 
   const toggleShowAddTask = () => {
